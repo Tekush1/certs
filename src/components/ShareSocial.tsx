@@ -27,7 +27,7 @@ export default function ShareSocial({ participant, certificateImage }: ShareSoci
     `👥 Team: ${participant.team}\n` +
     `🛡️ Event: ZeroDayHeist CTF 2026\n` +
     `🆔 Credential ID: ${participant.id}\n` +
-    `🔗 Verify: https://certs.cyberhx.com/?verify=${participant.id}\n\n` +
+    `🔗 Verify: ${window.location.origin}/?verify=${participant.id}\n\n` +
     `#cyberhx #zerodayheist #ctf #cybersecurity #ethicalhacking`;
 
   const copyCaption = () => {
@@ -64,7 +64,7 @@ export default function ShareSocial({ participant, certificateImage }: ShareSoci
       } catch { /* fallback */ }
     }
     if (!shared) {
-      const shareUrl = `https://certs.cyberhx.com/?verify=${participant.id}`;
+      const shareUrl = `${window.location.origin}/?verify=${participant.id}`;
       window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`, '_blank', 'noopener,noreferrer');
     }
   };
