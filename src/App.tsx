@@ -255,54 +255,7 @@ export default function App() {
                   </form>
                 </div>
 
-                {/* Registration */}
-                <div className="border border-cyber-border rounded-xl bg-cyber-card p-6 space-y-4">
-                  <div className="flex items-center justify-between">
-                    <h4 className="text-xs font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                      <UserPlus className="h-4 w-4 text-cyber-purple" />Contestant Registry
-                    </h4>
-                    <button
-                      onClick={() => setShowRegForm(!showRegForm)}
-                      className="px-2.5 py-1 border border-cyber-border hover:bg-cyber-light rounded text-[10px] font-mono text-cyber-cyan transition-colors"
-                    >
-                      {showRegForm ? 'Minimize' : 'Open'}
-                    </button>
-                  </div>
-                  <p className="text-xs text-zinc-400 font-mono leading-relaxed">
-                    Not on the registered list? Enter your details to generate your unique verification hash and download your certificate.
-                  </p>
-                  {showRegForm && (
-                    <form onSubmit={handleRegister} className="pt-2 border-t border-cyber-border space-y-3 font-mono text-xs">
-                      {[
-                        { label: 'Participant Name', value: regName,  setter: setRegName,  placeholder: 'Full name',        type: 'text',  maxLen: 80  },
-                        { label: 'Email ID',         value: regEmail, setter: setRegEmail, placeholder: 'email@domain.com', type: 'email', maxLen: 120 },
-                        { label: 'Team Name',        value: regTeam,  setter: setRegTeam,  placeholder: 'Team name',        type: 'text',  maxLen: 60  },
-                      ].map(f => (
-                        <div key={f.label} className="space-y-1.5">
-                          <label className="text-zinc-500 uppercase tracking-wider block">{f.label}:</label>
-                          <input
-                            type={f.type}
-                            value={f.value}
-                            onChange={e => f.setter(e.target.value)}
-                            placeholder={f.placeholder}
-                            maxLength={f.maxLen}
-                            className="w-full py-2 px-2.5 bg-cyber-bg border border-cyber-border rounded text-white focus:border-cyber-purple focus:outline-none"
-                            required
-                          />
-                        </div>
-                      ))}
-                      <button
-                        type="submit"
-                        disabled={isRegistering}
-                        className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-lg flex items-center justify-center gap-2 transition-all disabled:opacity-60 disabled:cursor-not-allowed shadow-lg shadow-blue-500/20 font-mono"
-                      >
-                        <Sparkles className="h-3.5 w-3.5" />
-                        <span>{isRegistering ? 'Registering...' : 'Issue Certificate'}</span>
-                      </button>
-                    </form>
-                  )}
-                </div>
-
+              
                 {/* Search results */}
                 {searchResults.length > 0 && (
                   <div className="border border-cyber-border rounded-xl bg-cyber-card p-4 space-y-3 max-h-[300px] overflow-y-auto">
