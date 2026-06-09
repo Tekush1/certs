@@ -134,7 +134,7 @@ export default function App() {
             { icon: '/icon-teams.png',        bg: 'bg-cyber-teal/15 border-cyber-teal/25',     label: 'Participating Teams', val: `${stats.teams} Teams` },
           ].map((s, i) => (
             <div key={i} className="p-4 border border-cyber-border/80 rounded-xl bg-cyber-card/45 flex items-center gap-4">
-              <div className={`p-2.5 border rounded-lg shrink-0 ${s.bg}`}>
+             <div className="shrink-0">
                 <img src={s.icon} alt="" className="h-5 w-5 object-contain" />
               </div>
               <div className="text-left font-mono">
