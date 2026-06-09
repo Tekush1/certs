@@ -353,7 +353,12 @@ export default function App() {
                   </div>
                 ) : (
                   <div className="border border-cyber-border rounded-xl bg-cyber-card/45 p-16 text-center space-y-5 flex flex-col justify-center items-center h-full">
-                    <img src="/zdh-badge.png" alt="ZeroDayHeist Badge" className="h-16 w-auto object-contain" />
+                    // Badlo
+<img
+  src={claimSection === 'grandfinale' ? '/zdh-finale.png' : '/zdh-badge.png'}
+  alt="ZeroDayHeist Badge"
+  className="h-20 w-auto object-contain"
+/>
                     <div className="space-y-1">
                       <h3 className="text-lg font-mono font-bold text-white uppercase tracking-wider">
                         {claimSection === 'grandfinale' ? 'Claim Grand Finale Certificate' : 'Claim Your Certificate'}
