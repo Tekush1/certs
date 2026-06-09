@@ -1,0 +1,6 @@
+{
+  "name": "ZeroDayHeist CTF Certificate Portal",
+  "description": "Participants can search by Email or Team Name to retrieve their CTF certificates, verify credentials, and share achievements to LinkedIn and Instagram.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
