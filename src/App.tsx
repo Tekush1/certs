@@ -62,6 +62,10 @@ export default function App() {
     const params = new URLSearchParams(window.location.search);
     const vc = params.get('verify');
     if (vc) { setInitialVerifyCode(vc); setActiveTab('verify'); }
+    ['zdh-badge.png', 'zdh-finale.png'].forEach(src => {
+    const img = new Image();
+    img.src = `/${src}`;
+  });
   }, []);
 
   // Reset search state when switching sections
