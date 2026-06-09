@@ -353,12 +353,7 @@ export default function App() {
                   </div>
                 ) : (
                   <div className="border border-cyber-border rounded-xl bg-cyber-card/45 p-16 text-center space-y-5 flex flex-col justify-center items-center h-full">
-                    <div className={`h-16 w-16 rounded-full flex items-center justify-center p-3 animate-pulse border ${claimSection === 'grandfinale' ? 'bg-yellow-400/15 border-yellow-400/20' : 'bg-cyber-cyan/15 border-cyber-cyan/20'}`}>
-                      {claimSection === 'grandfinale'
-                        ? <Trophy className="h-9 w-9 text-yellow-400" />
-                        : <Award className="h-9 w-9 text-cyber-cyan" />
-                      }
-                    </div>
+                    <img src="/zdh-badge.png" alt="ZeroDayHeist Badge" className="h-16 w-auto object-contain" />
                     <div className="space-y-1">
                       <h3 className="text-lg font-mono font-bold text-white uppercase tracking-wider">
                         {claimSection === 'grandfinale' ? 'Claim Grand Finale Certificate' : 'Claim Your Certificate'}
