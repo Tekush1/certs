@@ -6,16 +6,16 @@
 import React, { useState, useEffect } from 'react';
 import { Participant } from '../types';
 import { verifyCredential } from '../data/participants';
-import { ShieldCheck, CheckCircle2, ShieldX, Search, ArrowRight } from 'lucide-react';
+import { ShieldX, Search, ArrowRight } from 'lucide-react';
 
 interface VerifyCredentialsProps {
   initialCode?: string;
 }
 
 export default function VerifyCredentials({ initialCode = '' }: VerifyCredentialsProps) {
-  const [query, setQuery]           = useState<string>(initialCode);
-  const [result, setResult]         = useState<Participant | null>(null);
-  const [searched, setSearched]     = useState<boolean>(false);
+  const [query, setQuery]             = useState<string>(initialCode);
+  const [result, setResult]           = useState<Participant | null>(null);
+  const [searched, setSearched]       = useState<boolean>(false);
   const [isVerifying, setIsVerifying] = useState<boolean>(false);
 
   useEffect(() => {
@@ -43,14 +43,14 @@ export default function VerifyCredentials({ initialCode = '' }: VerifyCredential
     <div className="space-y-6">
 
       {/* Header */}
-      <div className="p-5 border border-cyber-border rounded-xl bg-cyber-card/60">
+      <div className="p-5 border border-red-900/40 rounded-xl bg-black">
         <h3 className="text-md font-mono font-bold text-white mb-2 uppercase tracking-wide">
           CTF Credentials Verification Authority
         </h3>
         <p className="text-xs text-zinc-400 font-mono leading-relaxed">
           Verify the authenticity of a ZeroDayHeist certificate. Enter the{' '}
-          <strong className="text-cyber-cyan font-bold">Verification Hash (e.g. ZDH-2026-XXXX)</strong>{' '}
-          or the <strong className="text-cyber-cyan font-bold">exact full name</strong> printed on the credential.
+          <strong className="text-red-400 font-bold">Verification Hash (e.g. ZDH-2026-XXXX)</strong>{' '}
+          or the <strong className="text-red-400 font-bold">exact full name</strong> printed on the credential.
         </p>
       </div>
 
@@ -65,7 +65,7 @@ export default function VerifyCredentials({ initialCode = '' }: VerifyCredential
             value={query}
             onChange={e => setQuery(e.target.value.slice(0, 120))}
             placeholder="Verification Hash or Participant Name..."
-            className="w-full pl-10 pr-4 py-3 bg-cyber-bg border border-cyber-border rounded-lg text-white font-mono text-sm placeholder-zinc-600 focus:border-cyber-cyan focus:outline-none transition-colors"
+            className="w-full pl-10 pr-4 py-3 bg-cyber-bg border border-cyber-border rounded-lg text-white font-mono text-sm placeholder-zinc-600 focus:border-red-500 focus:outline-none transition-colors"
           />
         </div>
         <button
@@ -81,16 +81,19 @@ export default function VerifyCredentials({ initialCode = '' }: VerifyCredential
       {/* Result */}
       {searched && !isVerifying && (
         result ? (
-          <div className={`border rounded-xl p-6 space-y-6 relative overflow-hidden shadow-lg ${result.certificateType === 'grandfinale' ? 'border-yellow-400/30 bg-yellow-400/5' : 'border-cyber-teal/30 bg-cyber-teal/5'}`}>
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 opacity-[0.03] pointer-events-none">
-              <ShieldCheck className={`h-48 w-48 ${result.certificateType === 'grandfinale' ? 'text-yellow-400' : 'text-cyber-teal'}`} />
-            </div>
+          <div className={`border rounded-xl p-6 space-y-6 relative overflow-hidden shadow-lg ${result.certificateType === 'grandfinale' ? 'border-yellow-400/30 bg-yellow-400/5' : 'border-red-900/40 bg-red-900/5'}`}>
+
+            {/* Badge icon */}
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4">
-              <div className={`p-3 rounded-full border shrink-0 ${result.certificateType === 'grandfinale' ? 'bg-yellow-400/10 border-yellow-400/30' : 'bg-cyber-teal/10 border-cyber-teal/30'}`}>
-                <CheckCircle2 className={`h-8 w-8 ${result.certificateType === 'grandfinale' ? 'text-yellow-400' : 'text-cyber-teal'}`} />
+              <div className="shrink-0">
+                <img
+                  src={result.certificateType === 'grandfinale' ? '/zdh-finale.png' : '/zdh-badge.png'}
+                  alt="Badge"
+                  className="h-16 w-auto object-contain drop-shadow-lg"
+                />
               </div>
               <div className="text-center sm:text-left space-y-1">
-                <div className={`font-mono font-bold text-lg uppercase tracking-widest ${result.certificateType === 'grandfinale' ? 'text-yellow-400' : 'text-cyber-teal'}`}>
+                <div className={`font-mono font-bold text-lg uppercase tracking-widest ${result.certificateType === 'grandfinale' ? 'text-yellow-400' : 'text-red-400'}`}>
                   {result.certificateType === 'grandfinale' ? '🏆 Grand Finale Credential Verified' : 'Credential Verified'}
                 </div>
                 <div className="text-xs font-mono text-zinc-400">
@@ -104,9 +107,9 @@ export default function VerifyCredentials({ initialCode = '' }: VerifyCredential
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-cyber-border/50 pt-4">
               <div className="space-y-3 font-mono text-xs">
                 {[
-                  { label: 'Recipient Name',    val: result.name,  color: 'text-white font-bold' },
-                  { label: 'Team',              val: result.team,  color: 'text-cyber-purple font-bold' },
-                  { label: 'Email ID',          val: result.email, color: 'text-white' },
+                  { label: 'Recipient Name', val: result.name,  color: 'text-white font-bold' },
+                  { label: 'Team',           val: result.team,  color: 'text-cyber-purple font-bold' },
+                  { label: 'Email ID',       val: result.email, color: 'text-white' },
                 ].map(r => (
                   <div key={r.label} className="flex justify-between border-b border-cyber-border/30 pb-2">
                     <span className="text-zinc-500">{r.label}:</span>
@@ -118,13 +121,13 @@ export default function VerifyCredentials({ initialCode = '' }: VerifyCredential
                 {result.rank != null && (
                   <div className="flex justify-between border-b border-cyber-border/30 pb-2">
                     <span className="text-zinc-500">CTF Rank:</span>
-                    <span className="text-cyber-teal font-bold">#{result.rank}</span>
+                    <span className="text-red-400 font-bold">#{result.rank}</span>
                   </div>
                 )}
                 {result.score != null && (
                   <div className="flex justify-between border-b border-cyber-border/30 pb-2">
                     <span className="text-zinc-500">Score:</span>
-                    <span className="text-cyber-cyan font-bold">{result.score} PTS</span>
+                    <span className="text-red-400 font-bold">{result.score} PTS</span>
                   </div>
                 )}
                 <div className="flex justify-between border-b border-cyber-border/30 pb-2">
@@ -138,17 +141,17 @@ export default function VerifyCredentials({ initialCode = '' }: VerifyCredential
               </div>
             </div>
 
-            <div className="p-3 bg-cyber-bg/50 border border-cyber-border rounded-lg text-[11px] font-mono text-zinc-500">
+            <div className="p-3 bg-cyber-bg/50 border border-red-900/20 rounded-lg text-[11px] font-mono text-zinc-500">
               ⚡ This credential is database-verified and corresponds to an authorized ZeroDayHeist CTF 2026 participant.
             </div>
           </div>
         ) : (
-          <div className="border border-cyber-magenta/30 rounded-xl bg-cyber-magenta/5 p-6 text-center space-y-4">
-            <div className="p-3 bg-cyber-magenta/10 rounded-full border border-cyber-magenta/30 inline-block">
-              <ShieldX className="h-8 w-8 text-cyber-magenta animate-pulse" />
+          <div className="border border-red-900/30 rounded-xl bg-red-900/5 p-6 text-center space-y-4">
+            <div className="p-3 bg-red-900/10 rounded-full border border-red-900/30 inline-block">
+              <ShieldX className="h-8 w-8 text-red-500 animate-pulse" />
             </div>
             <div className="space-y-1">
-              <h4 className="text-cyber-magenta font-mono font-bold text-md uppercase tracking-wider">
+              <h4 className="text-red-400 font-mono font-bold text-md uppercase tracking-wider">
                 Verification Failed
               </h4>
               <p className="text-xs font-mono text-zinc-400 max-w-md mx-auto">
