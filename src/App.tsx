@@ -7,7 +7,6 @@ import React, { useState, useEffect } from 'react';
 import { Participant, CertificateType } from './types';
 import {
   searchParticipants,
-  registerParticipant,
   getParticipantCount,
   getGrandFinaleCount,
   getTeamCount,
@@ -16,9 +15,7 @@ import CertificateRenderer from './components/CertificateRenderer';
 import ShareSocial from './components/ShareSocial';
 import VerifyCredentials from './components/VerifyCredentials';
 import {
-  Search, UserCheck, Award, UserPlus,
-  Sparkles, Terminal, Cpu, Lock, ChevronRight,
-  BookmarkCheck, Trophy,
+  Search, UserCheck, Award, ChevronRight, Trophy,
 } from 'lucide-react';
 
 type MainTab = 'claim' | 'verify';
@@ -33,15 +30,8 @@ export default function App() {
   const [selectedParticipant, setSelectedParticipant] = useState<Participant | null>(null);
   const [certificateImage, setCertificateImage]       = useState('');
 
-  const [regName, setRegName]     = useState('');
-  const [regEmail, setRegEmail]   = useState('');
-  const [regTeam, setRegTeam]     = useState('');
-  const [showRegForm, setShowRegForm]         = useState(false);
-  const [regSuccessMessage, setRegSuccessMessage] = useState('');
-
-  const [isSearching, setIsSearching]     = useState(false);
-  const [isRegistering, setIsRegistering] = useState(false);
-  const [statsLoading, setStatsLoading]   = useState(true);
+  const [isSearching, setIsSearching]   = useState(false);
+  const [statsLoading, setStatsLoading] = useState(true);
 
   const [stats, setStats] = useState({ participants: 0, grandfinale: 0, challenges: 48, teams: 0 });
   const [initialVerifyCode, setInitialVerifyCode] = useState('');
@@ -62,21 +52,19 @@ export default function App() {
     const params = new URLSearchParams(window.location.search);
     const vc = params.get('verify');
     if (vc) { setInitialVerifyCode(vc); setActiveTab('verify'); }
-    ['zdh-badge.png', 'zdh-finale.png'].forEach(src => {
-    const img = new Image();
-    img.src = `/${src}`;
-  });
+    // Preload all images
+    ['zdh-badge.png', 'zdh-finale.png', 'icon-participants.png', 'icon-grandfinale.png', 'icon-countries.png', 'icon-teams.png'].forEach(src => {
+      const img = new Image();
+      img.src = `/${src}`;
+    });
   }, []);
 
-  // Reset search state when switching sections
   const switchSection = (section: ClaimSection) => {
     setClaimSection(section);
     setSearchQuery('');
     setSearchResults([]);
     setSelectedParticipant(null);
     setCertificateImage('');
-    setShowRegForm(false);
-    setRegName(''); setRegEmail(''); setRegTeam('');
   };
 
   const currentType: CertificateType = claimSection === 'grandfinale' ? 'grandfinale' : 'participant';
@@ -96,28 +84,6 @@ export default function App() {
     setSearchQuery('');
   };
 
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!regName.trim() || !regEmail.trim() || !regTeam.trim()) {
-      alert('Please fill in all fields.');
-      return;
-    }
-    setIsRegistering(true);
-    try {
-      const p = await registerParticipant(regName.trim(), regEmail.trim(), regTeam.trim(), currentType);
-      await loadStats();
-      setSelectedParticipant(p);
-      setRegSuccessMessage(`Certificate issued for ${p.name}.`);
-      setRegName(''); setRegEmail(''); setRegTeam('');
-      setShowRegForm(false);
-      setTimeout(() => setRegSuccessMessage(''), 5000);
-    } catch (err: any) {
-      alert(err?.message ?? 'Registration failed. Please try again.');
-    } finally {
-      setIsRegistering(false);
-    }
-  };
-
   const statVal = (v: number | string) =>
     statsLoading
       ? <span className="animate-pulse text-zinc-500 text-sm">—</span>
@@ -132,13 +98,7 @@ export default function App() {
       <header className="border-b border-cyber-border bg-cyber-bg/80 backdrop-blur-lg sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-3">
-         <div className="flex items-center gap-3">
-  <img
-    src="/cyberhxlogo.png"
-    alt="cyberhx"
-    className="h-16 w-auto object-contain"
-  />
-</div>
+            <img src="/cyberhxlogo.png" alt="cyberhx" className="h-16 w-auto object-contain" />
           </div>
           <div className="flex bg-cyber-card/85 p-1 rounded-lg border border-cyber-border/80 gap-1">
             <button
@@ -165,23 +125,18 @@ export default function App() {
 
       <main className="flex-1 max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 w-full space-y-8">
 
-        {regSuccessMessage && (
-          <div className="p-4 bg-cyber-teal/10 border border-cyber-teal/30 rounded-xl flex items-center gap-3 font-mono text-xs text-cyber-teal">
-            <BookmarkCheck className="h-5 w-5 shrink-0" />
-            <span>{regSuccessMessage}</span>
-          </div>
-        )}
-
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
-            { icon: <Cpu className="h-5 w-5 text-cyber-cyan" />,    bg: 'bg-cyber-cyan/15 border-cyber-cyan/25',     label: 'Participants',        val: `${stats.participants} Validated` },
-            { icon: <Trophy className="h-5 w-5 text-yellow-400" />, bg: 'bg-yellow-400/15 border-yellow-400/25',     label: 'Grand Finale',        val: `${stats.grandfinale} Finalists` },
-            { icon: <Terminal className="h-5 w-5 text-cyber-purple" />, bg: 'bg-cyber-purple/15 border-cyber-purple/25', label: 'All over the world',   val: `${stats.challenges}+ Countries` },
-            { icon: <Lock className="h-5 w-5 text-cyber-teal" />,   bg: 'bg-cyber-teal/15 border-cyber-teal/25',    label: 'Participating Teams', val: `${stats.teams} Teams` },
+            { icon: '/icon-participants.png', bg: 'bg-cyber-cyan/15 border-cyber-cyan/25',     label: 'Participants',        val: `${stats.participants} Validated` },
+            { icon: '/icon-grandfinale.png',  bg: 'bg-yellow-400/15 border-yellow-400/25',     label: 'Grand Finale',        val: `${stats.grandfinale} Finalists` },
+            { icon: '/icon-countries.png',    bg: 'bg-cyber-purple/15 border-cyber-purple/25', label: 'All over the world',  val: `${stats.challenges}+ Countries` },
+            { icon: '/icon-teams.png',        bg: 'bg-cyber-teal/15 border-cyber-teal/25',     label: 'Participating Teams', val: `${stats.teams} Teams` },
           ].map((s, i) => (
-            <div key={i} className={`p-4 border border-cyber-border/80 rounded-xl bg-cyber-card/45 flex items-center gap-4 ${i >= 2 ? 'hidden md:flex' : ''}`}>
-              <div className={`p-2.5 border rounded-lg shrink-0 ${s.bg}`}>{s.icon}</div>
+            <div key={i} className="p-4 border border-cyber-border/80 rounded-xl bg-cyber-card/45 flex items-center gap-4">
+              <div className={`p-2.5 border rounded-lg shrink-0 ${s.bg}`}>
+                <img src={s.icon} alt="" className="h-5 w-5 object-contain" />
+              </div>
               <div className="text-left font-mono">
                 <div className="text-xs text-zinc-400">{s.label}</div>
                 <div className="text-md font-bold text-white tracking-wide">{statVal(s.val)}</div>
@@ -193,7 +148,7 @@ export default function App() {
         {activeTab === 'claim' ? (
           <div className="space-y-6">
 
-            {/* Section Toggle — Participants vs Grand Finale */}
+            {/* Section Toggle */}
             <div className="flex gap-3 p-1 bg-cyber-card/60 border border-cyber-border rounded-xl w-fit">
               <button
                 onClick={() => switchSection('participant')}
@@ -255,7 +210,6 @@ export default function App() {
                   </form>
                 </div>
 
-              
                 {/* Search results */}
                 {searchResults.length > 0 && (
                   <div className="border border-cyber-border rounded-xl bg-cyber-card p-4 space-y-3 max-h-[300px] overflow-y-auto">
@@ -310,12 +264,11 @@ export default function App() {
                   </div>
                 ) : (
                   <div className="border border-cyber-border rounded-xl bg-cyber-card/45 p-16 text-center space-y-5 flex flex-col justify-center items-center h-full">
-                    
-<img
-  src={claimSection === 'grandfinale' ? '/zdh-finale.png' : '/zdh-badge.png'}
-  alt="ZeroDayHeist Badge"
-  className="h-26 w-auto object-contain"
-/>
+                    <img
+                      src={claimSection === 'grandfinale' ? '/zdh-finale.png' : '/zdh-badge.png'}
+                      alt="ZeroDayHeist Badge"
+                      className="h-24 w-auto object-contain"
+                    />
                     <div className="space-y-1">
                       <h3 className="text-lg font-mono font-bold text-white uppercase tracking-wider">
                         {claimSection === 'grandfinale' ? 'Claim Grand Finale Certificate' : 'Claim Your Certificate'}
