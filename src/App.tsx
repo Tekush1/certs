@@ -135,7 +135,7 @@ export default function App() {
           ].map((s, i) => (
             <div key={i} className="p-4 border border-cyber-border/80 rounded-xl bg-cyber-card/45 flex items-center gap-4">
              <div className="shrink-0">
-                <img src={s.icon} alt="" className="h-5 w-5 object-contain" />
+                <img src={s.icon} alt="" className="h-12 w-12 object-contain" />
               </div>
               <div className="text-left font-mono">
                 <div className="text-xs text-zinc-400">{s.label}</div>
