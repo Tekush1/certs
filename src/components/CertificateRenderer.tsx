@@ -29,10 +29,9 @@ export default function CertificateRenderer({ participant, onImageGenerated }: C
   const [nameFontSize, setNameFontSize] = useState<number>(150);       // Elegant default sizing for luxury certificate calligraphy (calibrated to 150px)
   const [teamYPercent, setTeamYPercent] = useState<number>(67.5);      // Percentage height: 67.5%
   const [teamFontSize, setTeamFontSize] = useState<number>(24);        // Target font size in px at w=2000
-  const [verifyXPercent, setVerifyXPercent] = useState<number>(27.4);  // X-offset percent relative to full width: calibrated to 27.4%
-  const [verifyYPercent, setVerifyYPercent] = useState<number>(97.2);  // Y-offset percent from top: 97.2%
-  const [verifyFontSize, setVerifyFontSize] = useState<number>(14);    // Target font size in px at w=2000
-
+  const [verifyXPercent, setVerifyXPercent] = useState<number>(31.6);
+const [verifyYPercent, setVerifyYPercent] = useState<number>(96.9);
+const [verifyFontSize, setVerifyFontSize] = useState<number>(20);
   // Generate verification URL
   const verifyUrl = `${window.location.origin}?verify=${participant.id}`;
 
