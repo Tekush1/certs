@@ -173,7 +173,7 @@ export default function App() {
           {[
             { icon: <Cpu className="h-5 w-5 text-cyber-cyan" />,    bg: 'bg-cyber-cyan/15 border-cyber-cyan/25',     label: 'Participants',        val: `${stats.participants} Validated` },
             { icon: <Trophy className="h-5 w-5 text-yellow-400" />, bg: 'bg-yellow-400/15 border-yellow-400/25',     label: 'Grand Finale',        val: `${stats.grandfinale} Finalists` },
-            { icon: <Terminal className="h-5 w-5 text-cyber-purple" />, bg: 'bg-cyber-purple/15 border-cyber-purple/25', label: 'Countries Participating',   val: `${stats.challenges} Active` },
+            { icon: <Terminal className="h-5 w-5 text-cyber-purple" />, bg: 'bg-cyber-purple/15 border-cyber-purple/25', label: 'All over the world',   val: `${stats.challenges}+ Countries` },
             { icon: <Lock className="h-5 w-5 text-cyber-teal" />,   bg: 'bg-cyber-teal/15 border-cyber-teal/25',    label: 'Participating Teams', val: `${stats.teams} Teams` },
           ].map((s, i) => (
             <div key={i} className={`p-4 border border-cyber-border/80 rounded-xl bg-cyber-card/45 flex items-center gap-4 ${i >= 2 ? 'hidden md:flex' : ''}`}>
