@@ -153,20 +153,40 @@ export default function CertificateRenderer({ participant, onImageGenerated }: C
   };
 
   // Download — iOS Chrome: open in new tab, user long-presses to save
-  const handleDownload = () => {
-    if (!downloadUrl) return;
-    if (isIOS) {
-      window.open(downloadUrl, '_blank');
-      showToast('📸 Image tab mein khula — long press karke "Save to Photos" karo');
-      return;
+const handleDownload = () => {
+  if (!downloadUrl) return;
+  if (isIOS) {
+    const win = window.open('', '_blank');
+    if (win) {
+      win.document.write(`
+        <html>
+          <head>
+            <title>Save Certificate</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <style>
+              body { margin:0; background:#000; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; }
+              img { max-width:100%; height:auto; }
+              p { color:#fff; font-family:monospace; font-size:14px; margin-top:16px; text-align:center; padding:0 16px; }
+            </style>
+          </head>
+          <body>
+            <img src="${downloadUrl}" />
+            <p>📸 Long press on image → "Save to Photos"</p>
+          </body>
+        </html>
+      `);
+      win.document.close();
     }
-    const a = document.createElement('a');
-    a.href = downloadUrl;
-    a.download = `ZeroDayHeist-CTF-Certificate-${participant.name.replace(/\s+/g, '-')}.png`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  };
+    showToast('📸 New tab mein khula — long press → Save to Photos');
+    return;
+  }
+  const a = document.createElement('a');
+  a.href = downloadUrl;
+  a.download = `ZeroDayHeist-CTF-Certificate-${participant.name.replace(/\s+/g, '-')}.png`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+};
 
   // LinkedIn share
   const shareToLinkedIn = () => {
