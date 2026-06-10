@@ -124,27 +124,25 @@ export default function App() {
       </header>
 
       <main className="flex-1 max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 w-full space-y-8">
-
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {[
-            { icon: '/icon-participants.png', bg: 'bg-cyber-cyan/15 border-cyber-cyan/25',     label: 'Participants',        val: `${stats.participants} Validated` },
-            { icon: '/icon-grandfinale.png',  bg: 'bg-yellow-400/15 border-yellow-400/25',     label: 'Grand Finale',        val: `${stats.grandfinale} Finalists` },
-            { icon: '/icon-countries.png',    bg: 'bg-cyber-purple/15 border-cyber-purple/25', label: 'All over the world',  val: `${stats.challenges}+ Countries` },
-            { icon: '/icon-teams.png',        bg: 'bg-cyber-teal/15 border-cyber-teal/25',     label: 'Participating Teams', val: `${stats.teams} Teams` },
-          ].map((s, i) => (
-            <div key={i} className="p-4 border border-cyber-border/80 rounded-xl bg-cyber-card/45 flex items-center gap-4">
-             <div className="shrink-0">
-                <img src={s.icon} alt="" className="h-20 w-20 object-contain" />
-              </div>
-              <div className="text-left font-mono">
-                <div className="text-xs text-zinc-400">{s.label}</div>
-                <div className="text-md font-bold text-white tracking-wide">{statVal(s.val)}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-
+{/* Stats */}
+<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+  {[
+    { icon: '/icon-participants.png', label: 'Participants',        val: `${stats.participants} Validated` },
+    { icon: '/icon-grandfinale.png',  label: 'Grand Finale',        val: `${stats.grandfinale} Finalists` },
+    { icon: '/icon-countries.png',    label: 'All over the world',  val: `${stats.challenges}+ Countries` },
+    { icon: '/icon-teams.png',        label: 'Participating Teams', val: `${stats.teams} Teams` },
+  ].map((s, i) => (
+    <div key={i} className="p-3 border border-cyber-border/80 rounded-xl bg-cyber-card/45 flex items-center gap-2">
+      <div className="shrink-0">
+        <img src={s.icon} alt="" className="h-22 w-22 object-contain" />
+      </div>
+      <div className="text-left font-mono min-w-0">
+        <div className="text-[9px] md:text-xs text-zinc-400 leading-tight truncate">{s.label}</div>
+        <div className="text-[11px] md:text-sm font-bold text-white tracking-wide leading-tight">{statVal(s.val)}</div>
+      </div>
+    </div>
+  ))}
+</div>
         {activeTab === 'claim' ? (
           <div className="space-y-6">
 
