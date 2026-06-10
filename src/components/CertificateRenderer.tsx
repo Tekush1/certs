@@ -33,6 +33,7 @@ export default function CertificateRenderer({ participant, onImageGenerated }: C
   const [verifyFontSize, setVerifyFontSize] = useState<number>(20);
 
   const verifyUrl = `${window.location.origin}?verify=${participant.id}`;
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
 
   useEffect(() => {
     if (document.fonts) {
@@ -135,6 +136,95 @@ export default function CertificateRenderer({ participant, onImageGenerated }: C
     setTimeout(() => setCopiedId(false), 2000);
   };
 
+  // Download certificate — iOS fix
+  const handleDownload = () => {
+    if (!downloadUrl) return;
+    if (isIOS) {
+      window.open(downloadUrl, '_blank');
+      return;
+    }
+    const a = document.createElement('a');
+    a.href = downloadUrl;
+    a.download = `ZeroDayHeist-CTF-Certificate-${participant.name.replace(/\s+/g, '-')}.png`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
+  // Caption text for sharing
+  const captionText =
+    `🏆 ZeroDayHeist CTF 2026 — Certificate of Achievement\n\n` +
+    `Proud to share that I participated in ZeroDayHeist, a 6-Hour International Capture The Flag Competition organised by cyberhx.\n\n` +
+    `👤 Participant: ${participant.name}\n` +
+    `👥 Team: ${participant.team}\n` +
+    `🛡️ Event: ZeroDayHeist CTF 2026\n` +
+    `🆔 Credential ID: ${participant.id}\n` +
+    `🔗 Verify: ${verifyUrl}\n\n` +
+    `#cyberhx #zerodayheist #ctf #cybersecurity #ethicalhacking`;
+
+  const blobFromDataUrl = async (dataUrl: string): Promise<Blob | null> => {
+    if (!dataUrl.startsWith('data:image/')) return null;
+    try { return await (await fetch(dataUrl)).blob(); } catch { return null; }
+  };
+
+  // Share to LinkedIn — iOS app deep link
+  const shareToLinkedIn = async () => {
+    navigator.clipboard.writeText(captionText).catch(() => {});
+    // Try native share first (iOS will show share sheet)
+    if (downloadUrl && navigator.share && navigator.canShare) {
+      try {
+        const blob = await blobFromDataUrl(downloadUrl);
+        if (blob) {
+          const file = new File([blob], `ZeroDayHeist-${participant.name.replace(/\s+/g, '-')}.png`, { type: 'image/png' });
+          const sd = { files: [file], title: 'ZeroDayHeist CTF 2026 Certificate', text: captionText };
+          if (navigator.canShare(sd)) {
+            await navigator.share(sd);
+            return;
+          }
+        }
+      } catch { /* fallback */ }
+    }
+    // iOS deep link to LinkedIn app
+    if (isIOS) {
+      window.location.href = `linkedin://`;
+      setTimeout(() => {
+        window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(verifyUrl)}`, '_blank');
+      }, 500);
+      return;
+    }
+    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(verifyUrl)}`, '_blank', 'noopener,noreferrer');
+  };
+
+  // Share to Instagram — iOS app deep link
+  const shareToInstagram = async () => {
+    navigator.clipboard.writeText(captionText).catch(() => {});
+    // Try native share with image
+    if (downloadUrl && navigator.share && navigator.canShare) {
+      try {
+        const blob = await blobFromDataUrl(downloadUrl);
+        if (blob) {
+          const file = new File([blob], `ZeroDayHeist-${participant.name.replace(/\s+/g, '-')}.png`, { type: 'image/png' });
+          const sd = { files: [file], title: 'ZeroDayHeist CTF 2026 Certificate', text: captionText };
+          if (navigator.canShare(sd)) {
+            await navigator.share(sd);
+            return;
+          }
+        }
+      } catch { /* fallback */ }
+    }
+    // iOS: download image then open Instagram
+    if (isIOS) {
+      if (downloadUrl) window.open(downloadUrl, '_blank');
+      setTimeout(() => {
+        window.location.href = 'instagram://app';
+      }, 800);
+      return;
+    }
+    // Desktop fallback — download + open Instagram
+    if (downloadUrl) handleDownload();
+    setTimeout(() => window.open('https://www.instagram.com', '_blank'), 300);
+  };
+
   return (
     <div id="certificate-viewer" className="space-y-6">
 
@@ -212,15 +302,15 @@ export default function CertificateRenderer({ participant, onImageGenerated }: C
                 <h5 className="font-mono text-[11px] text-red-400 font-bold tracking-wider uppercase border-b border-zinc-800 pb-1.5">2. Verification Code (Bottom Bar)</h5>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <div className="flex justify-between text-[11px] mb-1 font-mono"><span>X Position ({verifyXPercent}%)</span><span className="text-zinc-500">Default: 27.4%</span></div>
+                    <div className="flex justify-between text-[11px] mb-1 font-mono"><span>X Position ({verifyXPercent}%)</span><span className="text-zinc-500">Default: 31.4%</span></div>
                     <input type="range" min="12" max="35" step="0.1" value={verifyXPercent} onChange={(e) => setVerifyXPercent(parseFloat(e.target.value))} className="w-full accent-red-500 bg-zinc-800 rounded-lg appearance-none h-1.5" />
                   </div>
                   <div>
-                    <div className="flex justify-between text-[11px] mb-1 font-mono"><span>Y Position ({verifyYPercent}%)</span><span className="text-zinc-500">Default: 97.2%</span></div>
+                    <div className="flex justify-between text-[11px] mb-1 font-mono"><span>Y Position ({verifyYPercent}%)</span><span className="text-zinc-500">Default: 96.4%</span></div>
                     <input type="range" min="93" max="99.5" step="0.1" value={verifyYPercent} onChange={(e) => setVerifyYPercent(parseFloat(e.target.value))} className="w-full accent-red-500 bg-zinc-800 rounded-lg appearance-none h-1.5" />
                   </div>
                   <div>
-                    <div className="flex justify-between text-[11px] mb-1 font-mono"><span>Font Size ({verifyFontSize}px)</span><span className="text-zinc-500">Default: 14px</span></div>
+                    <div className="flex justify-between text-[11px] mb-1 font-mono"><span>Font Size ({verifyFontSize}px)</span><span className="text-zinc-500">Default: 20px</span></div>
                     <input type="range" min="8" max="22" step="1" value={verifyFontSize} onChange={(e) => setVerifyFontSize(parseInt(e.target.value))} className="w-full accent-red-500 bg-zinc-800 rounded-lg appearance-none h-1.5" />
                   </div>
                 </div>
@@ -230,7 +320,7 @@ export default function CertificateRenderer({ participant, onImageGenerated }: C
         )}
       </div>
 
-      {/* ── Bottom: ID Card + Download — Image 2 style ── */}
+      {/* Bottom: ID Card + Download */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
         {/* Left: Digital Credential ID Card */}
@@ -257,7 +347,6 @@ export default function CertificateRenderer({ participant, onImageGenerated }: C
               </div>
             ))}
 
-            {/* Verification ID */}
             <div className="flex items-center justify-between py-2 border-b border-zinc-900">
               <div className="flex items-center gap-2">
                 <ShieldCheck className="h-3.5 w-3.5 text-red-500" />
@@ -271,7 +360,6 @@ export default function CertificateRenderer({ participant, onImageGenerated }: C
               </div>
             </div>
 
-            {/* Verification URL */}
             <div className="flex items-start justify-between py-2 border-b border-zinc-900 gap-3">
               <div className="flex items-center gap-2 shrink-0">
                 <ExternalLink className="h-3.5 w-3.5 text-red-500" />
@@ -286,7 +374,6 @@ export default function CertificateRenderer({ participant, onImageGenerated }: C
             </div>
           </div>
 
-          {/* Action buttons */}
           <div className="grid grid-cols-2 gap-2 pt-1">
             <button onClick={copyCredId} className="flex items-center justify-center gap-1.5 py-2 rounded-lg border border-red-900/40 bg-red-900/10 hover:bg-red-900/20 text-red-400 font-mono text-[11px] font-bold transition-all">
               <Copy className="h-3 w-3" /> COPY ID
@@ -296,36 +383,29 @@ export default function CertificateRenderer({ participant, onImageGenerated }: C
             </button>
           </div>
 
-          {/* Tamper proof note */}
           <div className="flex items-center gap-2 p-3 rounded-lg bg-green-900/10 border border-green-900/20">
             <Lock className="h-3.5 w-3.5 text-green-500 shrink-0" />
             <span className="text-[10px] font-mono text-green-400">This credential is cryptographically signed and tamper-proof.</span>
           </div>
         </div>
 
-        {/* Right: Badge + Download */}
+        {/* Right: Badge + Download + Share */}
         <div className="rounded-xl border border-red-900/40 bg-black p-5 flex flex-col items-center justify-between gap-4">
 
-          {/* Badge image */}
           <div className="flex-1 flex items-center justify-center w-full">
             <img
-              src="/zdh-badge.png"
+              src={participant.certificateType === 'grandfinale' ? '/zdh-finale.png' : '/zdh-badge.png'}
               alt="ZeroDayHeist Badge"
               className="max-h-52 w-auto object-contain drop-shadow-[0_0_24px_rgba(220,38,38,0.3)]"
-              onError={(e) => {
-                // Fallback if badge image not found
-                (e.target as HTMLImageElement).style.display = 'none';
-              }}
+              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
             />
           </div>
 
-          {/* Verified text */}
           <div className="text-center space-y-1">
             <div className="text-sm font-mono font-bold text-white tracking-[3px] uppercase">Verified Credential</div>
-            <p className="text-[10px] text-zinc-500 font-mono">This is a high-definition (A4 equivalent, landscape)<br />300 DPI certificate for archiving.</p>
+            <p className="text-[10px] text-zinc-500 font-mono">High-definition 300 DPI certificate for archiving.</p>
           </div>
 
-          {/* Trust badges */}
           <div className="flex items-center justify-center gap-3 flex-wrap">
             {['Blockchain Verified', 'Secure Credential', 'Tamper Proof'].map(t => (
               <div key={t} className="flex items-center gap-1 text-[9px] font-mono text-green-400">
@@ -334,15 +414,39 @@ export default function CertificateRenderer({ participant, onImageGenerated }: C
             ))}
           </div>
 
-          {/* Download button */}
-          <a
-            href={downloadUrl || '#'}
-            download={`ZeroDayHeist-CTF-Certificate-${participant.name.replace(/\s+/g, '-')}.png`}
-            className="w-full py-3.5 px-4 bg-red-600 hover:bg-red-700 text-white font-mono font-bold rounded-xl flex items-center justify-center gap-2 transition-all duration-200 active:scale-[0.98] shadow-lg shadow-red-900/30 uppercase tracking-wider text-sm"
+          {/* Download */}
+          <button
+            onClick={handleDownload}
+            disabled={!downloadUrl}
+            className="w-full py-3 px-4 bg-red-600 hover:bg-red-700 text-white font-mono font-bold rounded-xl flex items-center justify-center gap-2 transition-all duration-200 active:scale-[0.98] shadow-lg shadow-red-900/30 uppercase tracking-wider text-sm disabled:opacity-40"
           >
             <Download className="h-4 w-4" />
-            Download Verified Certificate
-          </a>
+            {isIOS ? 'Open Certificate → Save to Photos' : 'Download Verified Certificate'}
+          </button>
+
+          {/* Share buttons */}
+          <div className="grid grid-cols-2 gap-2 w-full">
+            <button
+              onClick={shareToLinkedIn}
+              className="py-2.5 px-3 rounded-xl font-mono text-xs font-bold flex items-center justify-center gap-2 bg-[#0a66c2] hover:bg-[#0957a8] text-white transition-all active:scale-[0.98]"
+            >
+              <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+              LinkedIn
+            </button>
+            <button
+              onClick={shareToInstagram}
+              className="py-2.5 px-3 rounded-xl font-mono text-xs font-bold flex items-center justify-center gap-2 bg-gradient-to-r from-[#f09433] via-[#dc2743] to-[#bc1888] text-white transition-all active:scale-[0.98]"
+            >
+              <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+              Instagram
+            </button>
+          </div>
+
+          {isIOS && (
+            <p className="text-[9px] font-mono text-zinc-600 text-center">
+              iOS: Certificate opens in browser → long press → Save to Photos → post on Instagram
+            </p>
+          )}
         </div>
       </div>
 
