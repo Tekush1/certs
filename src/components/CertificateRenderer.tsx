@@ -191,7 +191,7 @@ export default function CertificateRenderer({ participant, onImageGenerated }: C
     const issueDate = new Date(participant.issuedAt);
     const params = new URLSearchParams({
       startTask: 'CERTIFICATION_NAME',
-      name: 'ZeroDayHeist CTF 2026 — Certificate of Achievement',
+      name: 'ZeroDayHeist CTF 2026 Certificate of Achievement',
       organizationName: 'CyberHx',
       organizationId: '107736778',
       issueYear: String(issueDate.getFullYear() || 2026),

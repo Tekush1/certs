@@ -37,11 +37,6 @@ export default function ShareSocial({ participant, certificateImage }: ShareSoci
     setTimeout(() => setCopied(false), 2500);
   };
 
-  const blobFromDataUrl = async (dataUrl: string): Promise<Blob | null> => {
-    if (!dataUrl.startsWith('data:image/')) return null;
-    try { return await (await fetch(dataUrl)).blob(); } catch { return null; }
-  };
-
   const downloadCertificate = () => {
     if (!certificateImage) return;
     const a = document.createElement('a');
@@ -50,23 +45,19 @@ export default function ShareSocial({ participant, certificateImage }: ShareSoci
     a.click();
   };
 
-  const shareToLinkedIn = async () => {
-    copyCaption();
-    let shared = false;
-    if (certificateImage) {
-      try {
-        if (navigator.share && navigator.canShare) {
-          const blob = await blobFromDataUrl(certificateImage);
-          if (!blob) throw new Error('bad image');
-          const file = new File([blob], `ZeroDayHeist-${participant.name.replace(/\s+/g, '-')}.png`, { type: 'image/png' });
-          const sd = { files: [file], title: 'ZeroDayHeist CTF 2026 Certificate', text: captionText };
-          if (navigator.canShare(sd)) { await navigator.share(sd); shared = true; }
-        }
-      } catch { /* fallback */ }
-    }
-    if (!shared) {
-      window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(verifyUrl)}`, '_blank', 'noopener,noreferrer');
-    }
+  const shareToLinkedIn = () => {
+    const issueDate = new Date(participant.issuedAt);
+    const params = new URLSearchParams({
+      startTask: 'CERTIFICATION_NAME',
+      name: 'ZeroDayHeist CTF 2026 Certificate of Achievement',
+      organizationName: 'CyberHx',
+      organizationId: '107736778',
+      issueYear: String(issueDate.getFullYear() || 2026),
+      issueMonth: String((issueDate.getMonth() + 1) || 6),
+      certUrl: verifyUrl,
+      certId: participant.id,
+    });
+    window.open(`https://www.linkedin.com/profile/add?${params.toString()}`, '_blank', 'noopener,noreferrer');
   };
 
   const shareToInstagram = async () => {
@@ -165,7 +156,7 @@ export default function ShareSocial({ participant, certificateImage }: ShareSoci
             className="py-3 px-4 rounded-xl font-mono text-sm font-bold flex items-center justify-center gap-2 transition-all duration-200 bg-[#0a66c2] hover:bg-[#0957a8] text-white shadow-lg shadow-[#0a66c2]/25 active:scale-[0.98]"
           >
             <Linkedin className="h-4 w-4" />
-            Post to LinkedIn
+            Add to LinkedIn Profile
           </button>
 
           <button
