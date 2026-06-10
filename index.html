@@ -12,18 +12,77 @@
                connect-src 'self' https://*.supabase.co;
                frame-ancestors 'none';" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
+
     <title>ZeroDayHeist — Certificate Portal</title>
-<link rel="preload" href="/icon-participants.png" as="image" />
-<link rel="preload" href="/icon-grandfinale.png" as="image" />
-<link rel="preload" href="/icon-countries.png" as="image" />
-<link rel="preload" href="/icon-teams.png" as="image" />
-<link rel="preload" href="/zdh-badge.png" as="image" />
-<link rel="preload" href="/zdh-finale.png" as="image" />
-<link rel="preload" href="/cyberhxlogo.png" as="image" />
+
+    <!-- SEO Basic -->
+    <meta name="description" content="ZeroDayHeist CTF 2026 — Official Certificate Portal. Claim and verify your cybersecurity competition credentials by cyberhx." />
+    <meta name="keywords" content="ZeroDayHeist, CTF, cybersecurity, certificate, cyberhx, capture the flag, 2026, ethical hacking, competition" />
+    <meta name="author" content="cyberhx" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://certs.cyberhx.com/" />
+
+    <!-- Open Graph (Facebook, WhatsApp, LinkedIn preview) -->
+    <meta property="og:title" content="ZeroDayHeist CTF 2026 — Certificate Portal" />
+    <meta property="og:description" content="Claim and verify your ZeroDayHeist CTF 2026 certificate. Official portal by cyberhx." />
+    <meta property="og:url" content="https://certs.cyberhx.com/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://certs.cyberhx.com/cyberhxlogo.png" />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    <meta property="og:site_name" content="ZeroDayHeist Certificate Portal" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ZeroDayHeist CTF 2026 — Certificate Portal" />
+    <meta name="twitter:description" content="Claim and verify your ZeroDayHeist CTF 2026 certificate. Official portal by cyberhx." />
+    <meta name="twitter:image" content="https://certs.cyberhx.com/cyberhxlogo.png" />
+
+    <!-- Structured Data (Google Rich Results + Image Ranking) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "ZeroDayHeist CTF Certificate Portal",
+      "url": "https://certs.cyberhx.com",
+      "description": "Official certificate portal for ZeroDayHeist CTF 2026 by cyberhx.",
+      "publisher": {
+        "@type": "Organization",
+        "name": "cyberhx",
+        "url": "https://certs.cyberhx.com",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://certs.cyberhx.com/cyberhxlogo.png",
+          "width": 512,
+          "height": 512
+        }
+      },
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://certs.cyberhx.com/cyberhxlogo.png",
+        "width": 512,
+        "height": 512
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://certs.cyberhx.com/?verify={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
+    <!-- Preload Images -->
+    <link rel="preload" href="/cyberhxlogo.png" as="image" />
+    <link rel="preload" href="/icon-participants.png" as="image" />
+    <link rel="preload" href="/icon-grandfinale.png" as="image" />
+    <link rel="preload" href="/icon-countries.png" as="image" />
+    <link rel="preload" href="/icon-teams.png" as="image" />
+    <link rel="preload" href="/zdh-badge.png" as="image" />
+    <link rel="preload" href="/zdh-finale.png" as="image" />
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-
