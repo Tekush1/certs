@@ -18,6 +18,14 @@ import {
   Search, UserCheck, Award, ChevronRight, Trophy,
 } from 'lucide-react';
 
+function maskEmail(email: string): string {
+  const [local, domain] = email.split('@');
+  if (!domain || local.length < 2) return email;
+  const visible = local.slice(0, 2);
+  const masked  = '*'.repeat(Math.max(local.length - 2, 3));
+  return `${visible}${masked}@${domain}`;
+}
+
 type MainTab = 'claim' | 'verify';
 type ClaimSection = 'participant' | 'grandfinale';
 
@@ -227,7 +235,7 @@ export default function App() {
                           </div>
                           <div className="flex justify-between text-[11px] text-zinc-400">
                             <span>Team: {item.team}</span>
-                            <span>{item.email}</span>
+                            <span>{maskEmail(item.email)}</span>
                           </div>
                         </button>
                       ))}

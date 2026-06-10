@@ -8,6 +8,14 @@ import { Participant } from '../types';
 import { verifyCredential } from '../data/participants';
 import { ShieldX, Search, ArrowRight } from 'lucide-react';
 
+function maskEmail(email: string): string {
+  const [local, domain] = email.split('@');
+  if (!domain || local.length < 2) return email;
+  const visible = local.slice(0, 2);
+  const masked  = '*'.repeat(Math.max(local.length - 2, 3));
+  return `${visible}${masked}@${domain}`;
+}
+
 interface VerifyCredentialsProps {
   initialCode?: string;
 }
@@ -109,7 +117,7 @@ export default function VerifyCredentials({ initialCode = '' }: VerifyCredential
                 {[
                   { label: 'Recipient Name', val: result.name,  color: 'text-white font-bold' },
                   { label: 'Team',           val: result.team,  color: 'text-cyber-purple font-bold' },
-                  { label: 'Email ID',       val: result.email, color: 'text-white' },
+                  { label: 'Email ID',       val: maskEmail(result.email), color: 'text-white' },
                 ].map(r => (
                   <div key={r.label} className="flex justify-between border-b border-cyber-border/30 pb-2">
                     <span className="text-zinc-500">{r.label}:</span>
