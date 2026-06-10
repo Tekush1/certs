@@ -211,6 +211,7 @@ const handleDownload = () => {
       startTask: 'CERTIFICATION_NAME',
       name: 'ZeroDayHeist CTF 2026 — Certificate of Achievement',
       organizationName: 'CyberHx',
+      organizationId: '107736778',
       issueYear: String(issueDate.getFullYear() || 2026),
       issueMonth: String((issueDate.getMonth() + 1) || 6),
       certUrl: verifyUrl,
