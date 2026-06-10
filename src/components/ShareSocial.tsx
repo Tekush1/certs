@@ -29,7 +29,7 @@ export default function ShareSocial({ participant, certificateImage }: ShareSoci
     `🛡️ Event: ZeroDayHeist CTF 2026\n` +
     `🆔 Credential ID: ${participant.id}\n` +
     `🔗 Verify: ${verifyUrl}\n\n` +
-    `#cyberhx #zerodayheist #ctf #cybersecurity #ethicalhacking`;
+    `#cyberhx #ixedgeforge #zerodayheist #ctf #cybersecurity #ethicalhacking`;
 
   const copyCaption = () => {
     navigator.clipboard.writeText(captionText);
@@ -146,7 +146,7 @@ export default function ShareSocial({ participant, certificateImage }: ShareSoci
             <div><span className="text-zinc-500">Event:</span> <span className="text-white">ZeroDayHeist CTF 2026</span></div>
             <div><span className="text-zinc-500">Credential ID:</span> <span className="text-cyber-cyan">{participant.id}</span></div>
             <div><span className="text-zinc-500">Verify:</span> <span className="text-cyber-purple break-all">{verifyUrl}</span></div>
-            <div className="pt-1 text-cyber-cyan/70">#cyberhx #zerodayheist #ctf #cybersecurity #ethicalhacking</div>
+            <div className="pt-1 text-cyber-cyan/70">#cyberhx #ixedgeforge #zerodayheist #ctf #cybersecurity #ethicalhacking</div>
           </div>
         </div>
 
