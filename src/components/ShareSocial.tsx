@@ -23,13 +23,14 @@ export default function ShareSocial({ participant, certificateImage }: ShareSoci
 
   const captionText =
     `🏆 ZeroDayHeist CTF 2026 — Certificate of Achievement\n\n` +
-    `Proud to share that I participated in ZeroDayHeist, a 6-Hour International Capture The Flag Competition organised by cyberhx.\n\n` +
+    `Proud to have competed in ZeroDayHeist 2026 — a 6-hour international online CTF with 1,421 participants, 732 teams, and 48+ challenges spanning Web Exploitation, Cryptography, Forensics, OSINT & Reverse Engineering.\n\n` +
     `👤 Participant: ${participant.name}\n` +
     `👥 Team: ${participant.team}\n` +
+    (participant.rank != null ? `🏅 Rank: #${participant.rank}\n` : '') +
     `🛡️ Event: ZeroDayHeist CTF 2026\n` +
     `🆔 Credential ID: ${participant.id}\n` +
     `🔗 Verify: ${verifyUrl}\n\n` +
-    `#cyberhx #ixedgeforge #zerodayheist #ctf #cybersecurity #ethicalhacking`;
+    `#zerodayheist #ctf #cybersecurity #ethicalhacking #infosec`;
 
   const copyCaption = () => {
     navigator.clipboard.writeText(captionText);
@@ -133,21 +134,22 @@ export default function ShareSocial({ participant, certificateImage }: ShareSoci
 
           {/* Caption lines */}
           <div className="rounded-xl bg-cyber-bg border border-cyber-border p-4 font-mono text-[11px] text-zinc-300 leading-relaxed space-y-0.5">
-  <div className="text-white font-bold text-[13px] pb-1">🚩 ZeroDayHeist CTF 2026 — Certificate of Achievement</div>
-  <div className="pt-1 text-zinc-400 leading-5">
-    Proud to have competed in ZeroDayHeist 2026 — a 6-hour international online CTF with <span className="text-white">1,421 participants</span>, <span className="text-white">732 teams</span>, and <span className="text-white">48+ challenges</span> spanning Web Exploitation, Cryptography, Forensics, OSINT & Reverse Engineering.
-  </div>
-  <div className="pt-2 space-y-0.5">
-    <div><span className="text-zinc-500">Team:</span> <span className="text-white">{participant.team}</span></div>
-    <div><span className="text-zinc-500">Event:</span> <span className="text-white">ZeroDayHeist CTF 2026</span></div>
-    {participant.rank != null && (
-      <div><span className="text-zinc-500">Rank:</span> <span className="text-cyber-cyan font-bold">#{participant.rank}</span></div>
-    )}
-    <div><span className="text-zinc-500">Credential ID:</span> <span className="text-cyber-cyan">{participant.id}</span></div>
-    <div><span className="text-zinc-500">Verify:</span> <span className="text-cyber-purple break-all">{verifyUrl}</span></div>
-  </div>
-  <div className="pt-1 text-cyber-cyan/70">#cyberhx #ixedgeforge#zerodayheist #ctf #cybersecurity #ethicalhacking #infosec</div>
-</div>
+            <div className="text-white font-bold text-[13px] pb-1">🚩 ZeroDayHeist CTF 2026 — Certificate of Achievement</div>
+            <div className="pt-1 text-zinc-400 leading-5">
+              Proud to have competed in ZeroDayHeist 2026 — a 6-hour international online CTF with <span className="text-white">1,421 participants</span>, <span className="text-white">732 teams</span>, and <span className="text-white">48+ challenges</span> spanning Web Exploitation, Cryptography, Forensics, OSINT & Reverse Engineering.
+            </div>
+            <div className="pt-2 space-y-0.5">
+              <div><span className="text-zinc-500">Team:</span> <span className="text-white">{participant.team}</span></div>
+              <div><span className="text-zinc-500">Event:</span> <span className="text-white">ZeroDayHeist CTF 2026</span></div>
+              {participant.rank != null && (
+                <div><span className="text-zinc-500">Rank:</span> <span className="text-cyber-cyan font-bold">#{participant.rank}</span></div>
+              )}
+              <div><span className="text-zinc-500">Credential ID:</span> <span className="text-cyber-cyan">{participant.id}</span></div>
+              <div><span className="text-zinc-500">Verify:</span> <span className="text-cyber-purple break-all">{verifyUrl}</span></div>
+            </div>
+            <div className="pt-1 text-cyber-cyan/70">#zerodayheist #ctf #cybersecurity #ethicalhacking #infosec</div>
+          </div>
+        </div>
 
         {/* ── Instagram toast ── */}
         {igToast && (
