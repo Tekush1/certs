@@ -106,7 +106,10 @@ export default function CertificateRenderer({ participant, onImageGenerated }: C
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillStyle = '#0a0d14';
-    const nameSize = Math.round(nameFontSize * (h / 1414));
+    const baseFontSize = participant.name.length > 19
+      ? nameFontSize * (19 / participant.name.length) * 0.92
+      : nameFontSize;
+    const nameSize = Math.round(baseFontSize * (h / 1414));
 
     if (nameFontFamily === 'Playfair Display') {
       ctx.font = `700 ${nameSize}px "Playfair Display", "Times New Roman", serif`;
